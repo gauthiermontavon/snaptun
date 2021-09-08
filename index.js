@@ -11,7 +11,8 @@ var instance, server = {
       config = configObject || defaultOptions,
       file = config.file || 'loki.json',
       db = new loki(file, {
-        autoload: false
+        autoload: false,
+        autosave:true
       }),
       fs = require('fs'),
       routes = require('./routes')(db);
@@ -34,6 +35,8 @@ var instance, server = {
       console.log('registering ' + route.url + '[' + route.method + ']');
       app[route.method](route.url, route.handler);
     }
+
+
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({
       extended: true
