@@ -22,12 +22,42 @@
 
   var history = streamMaker();
   history.observe(pplCollList);
+  
+  var displayDetailCollections = function (collname){
+	console.log('dispplay:'+collname);
+	var main = $('#main');
+    //main.empty();
+	$.getJSON('/get/'+collname,function(data){
+		
+		console.log(JSON.stringify(data));
+		// using JSON.stringify pretty print capability:
+		var str = JSON.stringify(data, undefined, 4);
+
+		// display pretty printed object in text area:
+		document.getElementById('jsontext').innerHTML = str;
+
+	});
+  }
 
   function pplCollList(state) {
+
     var list = $('#collections');
+
+	var ref = displayDetailCollections;
     list.empty();
     state.collections.forEach(function (o) {
-      list.append($('<li></li>').text(o.name + '[' + o.count + ']'));
+		//console.log('one'+displayDetailCollections);
+		var li = document.createElement('li');
+		console.log('two');
+		li.addEventListener('click',function(){ref(o.name)} );
+		console.log('three');
+		//li.addEventListener('click',function(){alert('kikou')});
+		//li.onclick = ref(o.name);
+		var txt = document.createTextNode(o.name + '[' + o.count + ']--'); 
+		li.append(txt);
+		list.append(li);
+	
+     //list.append($('<li onclick="displayDetailCollections('+o.name+')"></li>').text(o.name + '[' + o.count + ']'));
     });
   }
 
@@ -48,6 +78,7 @@
       console.log('Data received, pushing to stream...');
       var newstate = copy(state);
       newstate.collections = data;
+	  console.log(JSON.stringify(data));
       history.update(newstate);
       return newstate;
     };
@@ -65,6 +96,8 @@
       options: options
     }, callback);
   }
+  
+
 
   getStats();
 
