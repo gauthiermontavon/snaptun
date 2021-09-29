@@ -195,6 +195,35 @@ function generateRoutes(db) {
       }
     }
   }, {
+    url: '/get/:collection/byhash/:md5',
+    method: 'get',
+    handler: function (req, res) {
+      var params = $utils.parseParams(req.params, {
+          collection: 'string',
+          hash: 'string'
+        }),
+        coll,
+        collection,
+        hash;
+
+      coll = params.collection;
+      if (!$utils.checkCollection(coll, res)) {
+        return;
+      }
+
+      collection = db.getCollection(coll);
+
+      if (req.params.md5) {
+        console.log('findOne by hhash:'+req.params.md5);
+        res.json(collection.findOne({md5:req.params.md5}));
+        //hash = parseInt(params.hash, 10);
+        //res.json(collection.get(hash));
+      }
+      /*else {
+        res.json(collection.find());
+      }*/
+    }
+  }, {
     url: '/delete/:collection/:id',
     method: 'delete',
     handler: function (req, res) {
