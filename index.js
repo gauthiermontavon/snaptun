@@ -4,14 +4,18 @@ var instance, server = {
     var express = require('express'),
       app = express(),
       loki = require('lokijs'),
+      //lfsa2 = require('loki-indexed-adapter'),
+      lfsa = require('lokijs/src/loki-fs-structured-adapter'),
       bodyParser = require('body-parser'),
       defaultOptions = {
         port: 20800
       },
       config = configObject || defaultOptions,
       file = config.file || 'loki.json',
+      adapter = new lfsa();
       db = new loki(file, {
-        autoload: false,
+        adapter:adapter,
+        autoload: true,
         autosave:true
       }),
       fs = require('fs'),
