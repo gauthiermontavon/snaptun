@@ -168,7 +168,35 @@ function generateRoutes(db) {
         }
       }
     }
-  }, {
+  },
+  {
+    method: 'post',
+    url: '/upsert',
+    handler: function (req, res) {
+      var coll, doc;
+      if ($utils.checkParams(req.body, res, ['collection', 'doc'])) {
+        if (coll = $utils.checkCollection(req.body.collection, res)) {
+          doc = coll.get(req.body.doc.$loki);
+          if (!doc) {
+            doc = db.getCollection(req.body.collection).insert(req.body.doc);
+            db.saveDatabase();
+            res.json({
+             'message': 'Document inserted',
+             'doc': doc
+            });
+            return;
+          }else{
+            $utils.mergeDocument(req.body.doc, doc, coll);
+            res.json({
+              'message': 'Document updated',
+              'doc': doc
+            });
+          }
+        }
+      }
+    }
+  },
+   {
     url: '/get/:collection/:id?',
     method: 'get',
     handler: function (req, res) {
