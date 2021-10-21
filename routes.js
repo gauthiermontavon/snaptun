@@ -176,8 +176,9 @@ function generateRoutes(db) {
       var coll, doc;
       if ($utils.checkParams(req.body, res, ['collection', 'doc'])) {
         if (coll = $utils.checkCollection(req.body.collection, res)) {
-          doc = coll.get(req.body.doc.$loki);
-          if (!doc) {
+          if(!req.body.doc.$loki){
+          //doc = coll.get(req.body.doc.$loki);
+          //if (!doc) {
             doc = db.getCollection(req.body.collection).insert(req.body.doc);
             db.saveDatabase();
             res.json({
@@ -186,6 +187,7 @@ function generateRoutes(db) {
             });
             return;
           }else{
+            doc = coll.get(req.body.doc.$loki);
             $utils.mergeDocument(req.body.doc, doc, coll);
             res.json({
               'message': 'Document updated',

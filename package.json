@@ -23,6 +23,7 @@
   "homepage": "https://github.com/techfort/snaptun",
   "dependencies": {
     "body-parser": "^1.10.0",
+    "cors": "^2.8.5",
     "express": "^4.10.6",
     "gordian": "0.0.9",
     "istanbul": "^0.3.5",

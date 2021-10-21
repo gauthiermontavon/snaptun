@@ -2,6 +2,7 @@ var instance, server = {
   start: function (configObject) {
 
     var express = require('express'),
+      cors = require('cors'),
       app = express(),
       loki = require('lokijs'),
       //lfsa2 = require('loki-indexed-adapter'),
@@ -40,7 +41,10 @@ var instance, server = {
       app[route.method](route.url, route.handler);
     }
 
-
+    const options = {
+      origin: 'http://localhost:4200',
+    }
+    app.use(cors(options));
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({
       extended: true
